@@ -7,17 +7,38 @@ import { Link } from "react-router-dom";
 function List() {
     const [listUser, setListUser] = useState([]);
 
+
+
+    const fetchDataUser = async () => {
+        const res = await userServices.listUser();
+        console.log(res.data);
+        setListUser(res.data)
+    }
+    
     useEffect(() => {
-
-        async function fetchDataUser() {
-            const res = await userServices.listUser();
-            console.log(res.data);
-            setListUser(res.data)
-        }
-
         fetchDataUser();
 
     }, [])
+
+    const onClickDelete = async (i, id) => {
+
+        var yes = confirm("are you sure to delete this item?");
+        if (yes === true) {
+
+            const res = await userServices.delete(id)
+
+            if (res.success) {
+                alert(res.message)
+                const newList = listEmployee
+                newList.splice(i, 1)
+                setListUser(newList);
+                await fetchDataUser();
+            }
+            else {
+                alert(res.message);
+            }
+        }
+    }
     return (
         <section>
             <table class="table">
@@ -35,7 +56,7 @@ function List() {
                 <tbody>
 
                     {
-                        listUser.map((item) => {
+                        listUser.map((item, i) => {
                             return (
                                 <tr>
                                     <th scope="row">{item.id}</th>
@@ -46,7 +67,7 @@ function List() {
                                     <td>{item.email}</td>
                                     <td>
                                         <Link class="btn btn-outline-info" to={"/user/edit/" + item.id}>Edit</Link>
-                                        <a href="#" class="btn btn-danger"> Delete </a>
+                                        <a href="#" onClick={() => onClickDelete(i, item.id)} class="btn btn-danger"> Delete </a>
                                     </td>
                                 </tr>
                             )

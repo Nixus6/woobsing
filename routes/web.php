@@ -26,3 +26,4 @@ Route::get('/user/index', 'App\Http\Controllers\UserController@index');
 Route::get('/user/list', 'App\Http\Controllers\UserController@index');
 Route::get('/user/form', 'App\Http\Controllers\UserController@index');
 Route::get('/user/edit/{num}', 'App\Http\Controllers\UserController@index');
+Route::put('/user/update/{id}', 'App\Http\Controllers\API\UserController@update');
